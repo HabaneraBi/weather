@@ -1,4 +1,4 @@
-import { latitudeAtom, longitudeAtom } from "@/src/app/atoms";
+import { latitudeAtom, longitudeAtom } from "@/src/shared/atoms";
 import { reatomComponent } from "@reatom/npm-react";
 import * as Location from "expo-location";
 import { useEffect, useRef } from "react";
