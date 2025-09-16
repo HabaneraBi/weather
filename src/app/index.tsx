@@ -1,5 +1,8 @@
+import { createCtx } from "@reatom/framework";
 import { Text, View } from "react-native";
 import "./global.css";
+
+export const ctx = createCtx();
 
 export default function Index() {
   return (
