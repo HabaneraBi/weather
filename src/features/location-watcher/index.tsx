@@ -1,7 +1,7 @@
-import { cityAtom, latitudeAtom, longitudeAtom } from "@/src/shared/atoms";
 import { reatomComponent } from "@reatom/npm-react";
 import * as Location from "expo-location";
 import { useEffect, useRef } from "react";
+import { cityAtom, latitudeAtom, longitudeAtom } from "../../shared/atoms";
 
 export const LocationWatcher = reatomComponent(({ ctx }) => {
   const lastReverseRef = useRef<number>(0);

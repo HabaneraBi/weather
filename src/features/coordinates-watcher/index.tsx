@@ -1,7 +1,7 @@
-import { latitudeAtom, longitudeAtom } from "@/src/shared/atoms";
 import { reatomComponent } from "@reatom/npm-react";
 import * as Location from "expo-location";
 import { useEffect, useRef } from "react";
+import { latitudeAtom, longitudeAtom } from "../../shared/atoms";
 
 export const CoordinatesWatcher = reatomComponent(({ ctx }) => {
   const subRef = useRef<Location.LocationSubscription | null>(null);
@@ -10,6 +10,7 @@ export const CoordinatesWatcher = reatomComponent(({ ctx }) => {
     (async () => {
       // 1) Разрешение
       const { status } = await Location.requestForegroundPermissionsAsync();
+
       if (status !== "granted") {
         return;
       }
@@ -24,6 +25,7 @@ export const CoordinatesWatcher = reatomComponent(({ ctx }) => {
         async (loc) => {
           // апдейтим атомы
           const { latitude, longitude } = loc.coords;
+          console.log(loc);
           latitudeAtom(ctx, latitude);
           longitudeAtom(ctx, longitude);
         }

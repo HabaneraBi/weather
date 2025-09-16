@@ -1,4 +1,5 @@
 import { atom } from "@reatom/framework";
+import { DayForecastInfo } from "../types";
 
 /** Содержит значение долготы */
 export const longitudeAtom = atom<null | number>(null, "lolongitudeAtom");
@@ -7,4 +8,16 @@ export const longitudeAtom = atom<null | number>(null, "lolongitudeAtom");
 export const latitudeAtom = atom<null | number>(null, "latitudeAtom");
 
 /** Содержит имя города, которые мы будем получать из координат */
-export const cityAtom = atom<string | null>(null, "cityAtom");
+export const cityAtom = atom<null | string>(null, "cityAtom");
+
+/** Содержит текущую температуру текущего дня */
+export const currentTemperature = atom<null | number>(
+  null,
+  "currentTemperature"
+);
+
+/** Атом массив содержит данные о погоде на пять дней */
+export const forecastInfoDaysAtom = atom<DayForecastInfo[]>(
+  [],
+  "forecastInfoDaysAtom"
+);
