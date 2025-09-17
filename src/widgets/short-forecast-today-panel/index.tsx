@@ -41,15 +41,15 @@ export const ShortForecastTodayPanel = reatomComponent(({ ctx }) => {
   return (
     <View className="text-white flex flex-col gap-3">
       <Text className="text-white text-2xl">{ctx.spy(cityAtom)}</Text>
-      <Text className="text-xl">{weatherInfoFromMap?.icon}</Text>
-      <Text className="text-white text-8xl">
+      <Text className="text-3xl">{weatherInfoFromMap?.icon}</Text>
+      <Text className="text-white text-9xl">
         {ctx.spy(currentTemperatureAtom)}°
       </Text>
       <View className="flex flex-row gap-2">
-        <Text className="text-[#F3F3F3] text-lg">
+        <Text className="text-[#F3F3F3] text-xl">
           {weatherInfoFromMap?.text}
         </Text>
-        <Text className="text-[#F3F3F3] text-lg">
+        <Text className="text-[#F3F3F3] text-xl">
           {currentForecastDay.tMax}°/{currentForecastDay.tMin}°
         </Text>
       </View>

@@ -1,19 +1,39 @@
-import { CoordinatesWatcher } from "@/features/coordinates-watcher";
-import { LocationWatcher } from "@/features/location-watcher";
 import { ShortForecastDaysPanel } from "@/widgets/short-forecast-days-panel";
 import { ShortForecastTodayPanel } from "@/widgets/short-forecast-today-panel";
 import { reatomComponent } from "@reatom/npm-react";
-import { FC } from "React";
-import { View } from "react-native";
-type MainPageProps = {};
+import { useRef } from "react";
+import { Animated, View } from "react-native";
 
-export const MainPage: FC<MainPageProps> = reatomComponent(({ ctx }) => {
+export const MainPage = reatomComponent(({ ctx }) => {
+  const scrollY = useRef(new Animated.Value(0)).current;
+
+  const fadeStyle = {
+    opacity: scrollY.interpolate({
+      inputRange: [0, 160],
+      outputRange: [1, 0],
+      extrapolate: "clamp",
+    }),
+  };
+
   return (
-    <View className="flex size-full flex-col justify-evenly">
-      <CoordinatesWatcher />
-      <LocationWatcher />
-      <ShortForecastTodayPanel />
-      <ShortForecastDaysPanel />
-    </View>
+    <>
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true }
+        )}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+        }}
+      >
+        <View className="h-screen flex flex-col justify-around">
+          <Animated.View style={fadeStyle}>
+            <ShortForecastTodayPanel />
+          </Animated.View>
+          <ShortForecastDaysPanel />
+        </View>
+      </Animated.ScrollView>
+    </>
   );
 });

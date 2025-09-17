@@ -2,7 +2,7 @@ import CalendarImage from "@/shared/assets/images/calendar.svg";
 import { forecastInfoDaysAtom } from "@/shared/atoms";
 import { reatomComponent } from "@reatom/npm-react";
 import { useRouter } from "expo-router";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { ShortForecastDay } from "./ui/part/short-forecast-day";
 
 export const ShortForecastDaysPanel = reatomComponent(({ ctx }) => {
@@ -23,13 +23,11 @@ export const ShortForecastDaysPanel = reatomComponent(({ ctx }) => {
             </View>
             <Text className="text-[#F3F3F3] text-lg">Прогноз на 5 дней</Text>
           </View>
-          <FlatList
-            keyExtractor={(item) => item.date}
-            data={forecastArray}
-            renderItem={({ item, index }) => (
+          <View>
+            {forecastArray.map((item, index) => (
               <ShortForecastDay index={index} forecastDay={item} />
-            )}
-          />
+            ))}
+          </View>
           <TouchableOpacity
             onPress={() => router.push("./forecast-days")}
             activeOpacity={0.3}
