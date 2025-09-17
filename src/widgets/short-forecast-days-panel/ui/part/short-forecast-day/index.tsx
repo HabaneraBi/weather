@@ -1,5 +1,5 @@
 import { weatherCodeMap } from "@/shared/constants/weather-code-map";
-import { formatForecastLabel } from "@/shared/functions/format-forecast-label";
+import { formatForecastDate } from "@/shared/functions/format-forecast-label";
 import { DayForecastInfo } from "@/shared/types";
 import { FC } from "React";
 import { Text, View } from "react-native";
@@ -18,7 +18,7 @@ export const ShortForecastDay: FC<ShortForecastDayProps> = ({
     <View className="flex flex-col">
       <View className="flex flex-row justify-between items-center h-14">
         <Text className="text-[#F3F3F3] w-[21%] text-xl">
-          {formatForecastLabel(forecastDay.date, index, 3)}
+          {formatForecastDate(forecastDay.date, index, 3)}
         </Text>
         <Text className="text-xl text-white">{weatherIcon}</Text>
         <View className="flex flex-row gap-1">

@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 const ForecastDays = () => {
   return (
-    <View className="size-full p-5 bg-white">
+    <View className="size-full px-2 py-4 bg-white">
       <ForecastDaysPage />
     </View>
   );

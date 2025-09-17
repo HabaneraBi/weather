@@ -1,5 +1,5 @@
 /** Форматирует дату в строку имени дня недели */
-export const formatForecastLabel = (
+export const formatForecastDate = (
   dateString: string,
   index: number,
   lengthArr: number

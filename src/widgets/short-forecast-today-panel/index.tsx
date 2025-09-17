@@ -18,10 +18,11 @@ export const ShortForecastTodayPanel = reatomComponent(({ ctx }) => {
   const currentForecastDay = ctx.spy(forecastInfoDaysAtom)[1];
   const currentWeatherCode = ctx.spy(currentWeatherCodeAtom);
 
-  // Получаем наименование для погоды в данный момент
-  const weatherText = currentWeatherCode
-    ? weatherCodeMap.get(currentWeatherCode)?.text
-    : null;
+  // Получаем инфу о текущей погоду
+  const weatherInfoFromMap =
+    currentWeatherCode !== null
+      ? weatherCodeMap.get(currentWeatherCode)
+      : undefined;
 
   useEffect(() => {
     if (latitude === null || longitude === null) return;
@@ -40,11 +41,14 @@ export const ShortForecastTodayPanel = reatomComponent(({ ctx }) => {
   return (
     <View className="text-white flex flex-col gap-3">
       <Text className="text-white text-2xl">{ctx.spy(cityAtom)}</Text>
+      <Text className="text-xl">{weatherInfoFromMap?.icon}</Text>
       <Text className="text-white text-8xl">
         {ctx.spy(currentTemperatureAtom)}°
       </Text>
       <View className="flex flex-row gap-2">
-        <Text className="text-[#F3F3F3] text-lg">{weatherText}</Text>
+        <Text className="text-[#F3F3F3] text-lg">
+          {weatherInfoFromMap?.text}
+        </Text>
         <Text className="text-[#F3F3F3] text-lg">
           {currentForecastDay.tMax}°/{currentForecastDay.tMin}°
         </Text>
