@@ -4,5 +4,7 @@ export type DayForecastInfo = {
   tMax: number;
   windSpeed: number;
   windDirection: string;
-  weatherCode: number;
+  averageWeatherCode: number;
+  weatherCodeNight: number;
+  weatherCodeDay: number;
 };

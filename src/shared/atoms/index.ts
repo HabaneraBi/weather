@@ -11,9 +11,15 @@ export const latitudeAtom = atom<null | number>(null, "latitudeAtom");
 export const cityAtom = atom<null | string>(null, "cityAtom");
 
 /** Содержит текущую температуру текущего дня */
-export const currentTemperature = atom<null | number>(
+export const currentTemperatureAtom = atom<null | number>(
   null,
   "currentTemperature"
+);
+
+/** Содержит текущий weatherCode */
+export const currentWeatherCodeAtom = atom<null | number>(
+  null,
+  "currentWeatherCodeAtom"
 );
 
 /** Атом массив содержит данные о погоде на пять дней */
@@ -21,3 +27,6 @@ export const forecastInfoDaysAtom = atom<DayForecastInfo[]>(
   [],
   "forecastInfoDaysAtom"
 );
+
+/** Атом общей ошибки */
+export const errorAtom = atom<string | null>(null, "errorAtom");

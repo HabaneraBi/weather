@@ -1,8 +1,6 @@
+import { MainPage } from "@/pages/main-page";
 import { LinearGradient } from "expo-linear-gradient";
-import { CoordinatesWatcher } from "../features/coordinates-watcher";
-import { LocationWatcher } from "../features/location-watcher";
 import { Loader } from "../shared/ui/part/loader";
-import { ShortForecastPanel } from "../widgets/short-forecast-panel";
 import "./global.css";
 
 const Index = () => {
@@ -13,10 +11,8 @@ const Index = () => {
       end={{ x: 0.5, y: 1 }}
       className="size-full p-5"
     >
-      <CoordinatesWatcher />
-      <LocationWatcher />
       <Loader />
-      <ShortForecastPanel />
+      <MainPage />
     </LinearGradient>
   );
 };
