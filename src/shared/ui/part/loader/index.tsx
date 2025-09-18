@@ -14,6 +14,14 @@ const AnimatedSvg = Animated.createAnimatedComponent(LoadingImage);
 export const Loader = reatomComponent(({ ctx }) => {
   const spin = useRef(new Animated.Value(0)).current;
 
+  console.log(ctx.spy(longitudeAtom), "ctx.spy(longitudeAtom)");
+  console.log(ctx.spy(latitudeAtom), "ctx.spy(latitudeAtom) ");
+  console.log(ctx.spy(cityAtom), "ctx.spy(cityAtom)");
+  console.log(
+    ctx.spy(forecastInfoDaysAtom).length,
+    "ctx.spy(forecastInfoDaysAtom).length"
+  );
+
   const isShowLoader =
     ctx.spy(longitudeAtom) !== null &&
     ctx.spy(latitudeAtom) !== null &&

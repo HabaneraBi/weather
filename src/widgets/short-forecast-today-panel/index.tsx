@@ -1,7 +1,10 @@
 import { reatomComponent } from "@reatom/npm-react";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
-import { loadForecast } from "../../shared/actions";
+import {
+  getWeatherInfoFromMapAction,
+  loadForecast,
+} from "../../shared/actions";
 import {
   cityAtom,
   currentTemperatureAtom,
@@ -10,7 +13,6 @@ import {
   latitudeAtom,
   longitudeAtom,
 } from "../../shared/atoms";
-import { weatherCodeMap } from "../../shared/constants/weather-code-map";
 
 export const ShortForecastTodayPanel = reatomComponent(({ ctx }) => {
   const latitude = ctx.spy(latitudeAtom);
@@ -18,10 +20,10 @@ export const ShortForecastTodayPanel = reatomComponent(({ ctx }) => {
   const currentForecastDay = ctx.spy(forecastInfoDaysAtom)[1];
   const currentWeatherCode = ctx.spy(currentWeatherCodeAtom);
 
-  // Получаем инфу о текущей погоду
+  // Получаем инфу о текущей погоде
   const weatherInfoFromMap =
     currentWeatherCode !== null
-      ? weatherCodeMap.get(currentWeatherCode)
+      ? getWeatherInfoFromMapAction(ctx, currentWeatherCode)
       : undefined;
 
   useEffect(() => {

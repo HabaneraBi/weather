@@ -5,9 +5,14 @@ import {
   currentWeatherCodeAtom,
   errorAtom,
   forecastInfoDaysAtom,
+  isDayAtom,
   latitudeAtom,
   longitudeAtom,
 } from "../atoms";
+import {
+  weatherCodeMapDay,
+  weatherCodeMapNight,
+} from "../constants/weather-code-map";
 import { degToCompass } from "../functions/deg-to-compass";
 import { getWeatherCodeFromHour } from "../functions/get-weather-code-from-hour";
 import { DayForecastInfo } from "../types";
@@ -28,13 +33,14 @@ export const loadForecast = action(async (ctx) => {
       "&current_weather=true";
 
     const { data } = await axios.get(url);
-
+    console.log(data);
     // Апдейтим forecastInfoDaysAtom
     updateForecastArrayByApi(ctx, data.daily, data.hourly);
 
-    // Апдейтим атомы currentTemperatureAtom и currentWeatherCodeAtom для сейчашней погоды
+    // Апдейтим атомы currentTemperatureAtom, currentWeatherCodeAtom, isDay для сейчашней погоды
     updateCurrentWeatherCodeAtom(ctx, data);
     updateCurrentTemperatureAtom(ctx, data);
+    updateIsDayAtom(ctx, data);
   } catch (e) {
     errorAtom(ctx, e as string);
     console.log(e);
@@ -77,6 +83,16 @@ export const updateForecastArrayByApi = action(
   "updateForecastArrayByApi"
 );
 
+/** Апдейтит атом isDay */
+export const updateIsDayAtom = action((ctx, weatherData: any) => {
+  const dayCode = weatherData.current_weather.is_day;
+  if (dayCode === 1) {
+    isDayAtom(ctx, true);
+    return;
+  }
+  isDayAtom(ctx, false);
+}, "updateIsDayAtom");
+
 /** Апдейтит атом currentWeatherCodeAtom по данным из апи */
 export const updateCurrentWeatherCodeAtom = action((ctx, weatherData: any) => {
   const currentWeatherCode = weatherData.current_weather.weathercode as number;
@@ -92,3 +108,21 @@ export const updateCurrentTemperatureAtom = action((ctx, weatherData: any) => {
 
   currentTemperatureAtom(ctx, currentTemperature);
 }, "updateCurrentTemperatureAtom");
+
+/** Определяет по атому или по параметру день ли сейчас и
+ * с помощью этого и параметру weatherCode возаращет нужные данные
+ * о погоде из мапы
+ */
+export const getWeatherInfoFromMapAction = action(
+  (ctx, weatherCode: number, isDay?: boolean) => {
+    if (isDay === undefined) {
+      isDay = ctx.get(isDayAtom);
+    }
+
+    if (isDay) {
+      return weatherCodeMapDay.get(weatherCode);
+    }
+    return weatherCodeMapNight.get(weatherCode);
+  },
+  "getWeatherInfoFromMapAction"
+);

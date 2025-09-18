@@ -30,3 +30,6 @@ export const forecastInfoDaysAtom = atom<DayForecastInfo[]>(
 
 /** Атом общей ошибки */
 export const errorAtom = atom<string | null>(null, "errorAtom");
+
+/** Содержаший bool для - "Сейчас день?"  */
+export const isDayAtom = atom<boolean>(true, "isDay");
