@@ -11,7 +11,7 @@ type ForecastDayProps = {
   index: number;
 };
 
-export const ForecastDay: FC<ForecastDayProps> = reatomComponent(
+export const FullForecastDay: FC<ForecastDayProps> = reatomComponent(
   ({ ctx, forecastDay, index }) => {
     return (
       <View

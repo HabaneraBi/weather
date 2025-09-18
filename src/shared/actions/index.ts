@@ -8,6 +8,8 @@ import {
   isDayAtom,
   latitudeAtom,
   longitudeAtom,
+  sunriseAtom,
+  sunsetAtom,
 } from "../atoms";
 import {
   weatherCodeMapDay,
@@ -33,7 +35,10 @@ export const loadForecast = action(async (ctx) => {
       "&current_weather=true";
 
     const { data } = await axios.get(url);
-    console.log(data);
+
+    // Апдейтим атомы заката и рассвета на сегодня
+    updateSunStateAtoms(ctx, data);
+
     // Апдейтим forecastInfoDaysAtom
     updateForecastArrayByApi(ctx, data.daily, data.hourly);
 
@@ -126,3 +131,17 @@ export const getWeatherInfoFromMapAction = action(
   },
   "getWeatherInfoFromMapAction"
 );
+
+export const updateSunStateAtoms = action((ctx, weatherData) => {
+  const daily = weatherData.daily;
+
+  // Получаем сегодняшнюю дату
+  const currentDate = weatherData.current_weather.time.split("T")[0];
+
+  // Вытаскиваем индекс сегодняшней даты из массива time
+  const indexFromTimeArray = (daily.time as string[]).indexOf(currentDate);
+
+  // Находим нужные значения времени в массивах sunrise и sunset
+  sunriseAtom(ctx, daily.sunrise[indexFromTimeArray].split("T")[1]);
+  sunsetAtom(ctx, daily.sunset[indexFromTimeArray].split("T")[1]);
+}, "updateSunStateAtoms");

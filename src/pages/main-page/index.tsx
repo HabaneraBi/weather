@@ -1,5 +1,6 @@
 import { CoordinatesWatcher } from "@/features/coordinates-watcher";
 import { LocationWatcher } from "@/features/location-watcher";
+import { FullForecastTodayPanel } from "@/widgets/full-forecast-today-panel";
 import { ShortForecastDaysPanel } from "@/widgets/short-forecast-days-panel";
 import { ShortForecastTodayPanel } from "@/widgets/short-forecast-today-panel";
 import { reatomComponent } from "@reatom/npm-react";
@@ -18,7 +19,7 @@ export const MainPage = reatomComponent(({ ctx }) => {
   };
 
   return (
-    <>
+    <View style={{ paddingBottom: 60 }}>
       <LocationWatcher />
       <CoordinatesWatcher />
       <Animated.ScrollView
@@ -37,7 +38,8 @@ export const MainPage = reatomComponent(({ ctx }) => {
           </Animated.View>
           <ShortForecastDaysPanel />
         </View>
+        <FullForecastTodayPanel />
       </Animated.ScrollView>
-    </>
+    </View>
   );
 });

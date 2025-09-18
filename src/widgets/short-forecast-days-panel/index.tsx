@@ -1,5 +1,5 @@
 import CalendarImage from "@/shared/assets/images/calendar.svg";
-import { forecastInfoDaysAtom, isDayAtom } from "@/shared/atoms";
+import { colorThemeAtom, forecastInfoDaysAtom } from "@/shared/atoms";
 import { reatomComponent } from "@reatom/npm-react";
 import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -9,9 +9,7 @@ export const ShortForecastDaysPanel = reatomComponent(({ ctx }) => {
   const forecastArray = ctx.spy(forecastInfoDaysAtom).slice(1, 4);
   const router = useRouter();
 
-  const styleByTimeOfDay = ctx.spy(isDayAtom)
-    ? "#5f8ec2"
-    : "rgba(255,255,255,0.1)";
+  const styleByTimeOfDay = ctx.spy(colorThemeAtom);
 
   return (
     <>

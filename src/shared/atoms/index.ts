@@ -33,3 +33,14 @@ export const errorAtom = atom<string | null>(null, "errorAtom");
 
 /** Содержаший bool для - "Сейчас день?"  */
 export const isDayAtom = atom<boolean>(true, "isDay");
+
+/** Атом содержащий время восхода солнца в текущий день */
+export const sunriseAtom = atom("", "sunriseAtom");
+
+/** Атом содержащий время заката солнца в текущий день */
+export const sunsetAtom = atom("", "sunsetAtom");
+
+/** Атом содержаший цвет для темы */
+export const colorThemeAtom = atom((ctx) => {
+  return ctx.get(isDayAtom) ? "#5f8ec2" : "rgba(255,255,255,0.1)";
+});
