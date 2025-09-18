@@ -25,7 +25,11 @@ export const ShortForecastDaysPanel = reatomComponent(({ ctx }) => {
           </View>
           <View>
             {forecastArray.map((item, index) => (
-              <ShortForecastDay index={index} forecastDay={item} />
+              <ShortForecastDay
+                key={item.date}
+                index={index}
+                forecastDay={item}
+              />
             ))}
           </View>
           <TouchableOpacity

@@ -37,7 +37,7 @@ export const loadForecast = action(async (ctx) => {
     updateCurrentTemperatureAtom(ctx, data);
   } catch (e) {
     errorAtom(ctx, e as string);
-    console.error(e);
+    console.log(e);
   }
 }, "loadForecast");
 

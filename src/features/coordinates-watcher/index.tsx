@@ -25,7 +25,6 @@ export const CoordinatesWatcher = reatomComponent(({ ctx }) => {
         async (loc) => {
           // апдейтим атомы
           const { latitude, longitude } = loc.coords;
-          console.log(loc);
           latitudeAtom(ctx, latitude);
           longitudeAtom(ctx, longitude);
         }

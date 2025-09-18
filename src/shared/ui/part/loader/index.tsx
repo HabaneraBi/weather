@@ -44,8 +44,10 @@ export const Loader = reatomComponent(({ ctx }) => {
           height={48}
           style={{
             transform: [{ rotate }],
-            zIndex: 3,
+            zIndex: 5,
             position: "absolute",
+            marginTop: -24,
+            marginLeft: -24,
             top: "50%",
             left: "50%",
           }}

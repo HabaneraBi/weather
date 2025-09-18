@@ -1,3 +1,5 @@
+import { CoordinatesWatcher } from "@/features/coordinates-watcher";
+import { LocationWatcher } from "@/features/location-watcher";
 import { ShortForecastDaysPanel } from "@/widgets/short-forecast-days-panel";
 import { ShortForecastTodayPanel } from "@/widgets/short-forecast-today-panel";
 import { reatomComponent } from "@reatom/npm-react";
@@ -17,6 +19,8 @@ export const MainPage = reatomComponent(({ ctx }) => {
 
   return (
     <>
+      <LocationWatcher />
+      <CoordinatesWatcher />
       <Animated.ScrollView
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
