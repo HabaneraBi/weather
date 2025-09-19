@@ -1,4 +1,3 @@
-import { isDayAtom } from "@/shared/atoms";
 import { formatForecastDate } from "@/shared/functions/format-forecast-label";
 import { getWeatherInfoFromMap } from "@/shared/functions/get-weather-info-from-map";
 import { DayForecastInfo } from "@/shared/types";
@@ -15,7 +14,7 @@ export const ShortForecastDay: FC<ShortForecastDayProps> = reatomComponent(
   ({ ctx, forecastDay, index }) => {
     const weatherIcon = getWeatherInfoFromMap(
       forecastDay.averageWeatherCode,
-      ctx.spy(isDayAtom)
+      true
     )?.icon;
 
     return (
