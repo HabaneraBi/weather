@@ -144,9 +144,12 @@ export const updateAtomsByHourly = action((ctx, weatherData: any) => {
   );
 
   // Подставляем в атомы нужные значения из массивов с давлением, температуры по ощущениям, влажности
-  currentHumidityAtom(ctx, hourly.relative_humidity_2m[index]);
-  currentAirPressureAtom(ctx, hourly.surface_pressure[index]);
-  currentFeelTemperatureAtom(ctx, hourly.apparent_temperature[index]);
+  currentHumidityAtom(ctx, Math.round(hourly.relative_humidity_2m[index]));
+  currentAirPressureAtom(ctx, Math.round(hourly.surface_pressure[index]));
+  currentFeelTemperatureAtom(
+    ctx,
+    Math.round(hourly.apparent_temperature[index])
+  );
 
   // Собираем массив для почасовой погоды
   const hourlyArray: CurrentHourForecast[] = (hourly.time as string[])

@@ -51,16 +51,13 @@ export const secondlyColorThemeAtom = atom((ctx) => {
 });
 
 /** Атом содержащий конкретную влажность в данный момент */
-export const currentHumidityAtom = atom("", "humidityAtom");
+export const currentHumidityAtom = atom(0, "humidityAtom");
 
 /** Атом содержащий давление в данный момент */
-export const currentAirPressureAtom = atom("", "airPressureAtom");
+export const currentAirPressureAtom = atom(0, "airPressureAtom");
 
 /** Атом содержащий температуру по ощущениям */
-export const currentFeelTemperatureAtom = atom(
-  "",
-  "currentFeelTemperatureAtom"
-);
+export const currentFeelTemperatureAtom = atom(0, "currentFeelTemperatureAtom");
 
 /** Атом содержащий текущее направление ветра */
 export const currentWindDirectionAtom = atom(0, "currentWindDirectionAtom");
