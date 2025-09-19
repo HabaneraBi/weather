@@ -40,7 +40,30 @@ export const sunriseAtom = atom("", "sunriseAtom");
 /** Атом содержащий время заката солнца в текущий день */
 export const sunsetAtom = atom("", "sunsetAtom");
 
-/** Атом содержаший цвет для темы */
-export const colorThemeAtom = atom((ctx) => {
+/** Атом содержаший главный цвет для темы в зависимости от времени суток */
+export const mainColorThemeAtom = atom((ctx) => {
   return ctx.get(isDayAtom) ? "#5f8ec2" : "rgba(255,255,255,0.1)";
 });
+
+/** Атом содержащий второстепенный цвет темы в зависимости от времени суток */
+export const secondlyColorThemeAtom = atom((ctx) => {
+  return ctx.get(isDayAtom) ? "#87a8d3" : "rgba(255,255,255,0.1)";
+});
+
+/** Атом содержащий конкретную влажность в данный момент */
+export const currentHumidityAtom = atom("", "humidityAtom");
+
+/** Атом содержащий давление в данный момент */
+export const currentAirPressureAtom = atom("", "airPressureAtom");
+
+/** Атом содержащий температуру по ощущениям */
+export const currentFeelTemperatureAtom = atom(
+  "",
+  "currentFeelTemperatureAtom"
+);
+
+/** Атом содержащий текущее направление ветра */
+export const currentWindDirectionAtom = atom(0, "currentWindDirectionAtom");
+
+/** Атом содержащий текущую скорость ветра в м/с */
+export const currentWindSpeed = atom(0, "currentWindSpeed");

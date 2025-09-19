@@ -1,8 +1,13 @@
 import { action } from "@reatom/framework";
 import axios from "axios";
 import {
+  currentAirPressureAtom,
+  currentFeelTemperatureAtom,
+  currentHumidityAtom,
   currentTemperatureAtom,
   currentWeatherCodeAtom,
+  currentWindDirectionAtom,
+  currentWindSpeed,
   errorAtom,
   forecastInfoDaysAtom,
   isDayAtom,
@@ -11,10 +16,6 @@ import {
   sunriseAtom,
   sunsetAtom,
 } from "../atoms";
-import {
-  weatherCodeMapDay,
-  weatherCodeMapNight,
-} from "../constants/weather-code-map";
 import { degToCompass } from "../functions/deg-to-compass";
 import { getWeatherCodeFromHour } from "../functions/get-weather-code-from-hour";
 import { DayForecastInfo } from "../types";
@@ -25,16 +26,26 @@ export const loadForecast = action(async (ctx) => {
     const latitude = ctx.get(latitudeAtom);
     const longitude = ctx.get(longitudeAtom);
 
-    const url =
-      "https://api.open-meteo.com/v1/forecast" +
-      `?latitude=${latitude}&longitude=${longitude}` +
-      "&daily=temperature_2m_min,temperature_2m_max,weathercode,wind_speed_10m_max,wind_direction_10m_dominant,sunrise,sunset" + // добавили sunrise,sunset
-      "&hourly=weathercode" + // почасовые коды
-      "&past_days=1&forecast_days=4" + // вчера + сегодня + 3 дня
-      "&wind_speed_unit=ms&timezone=auto" +
-      "&current_weather=true";
+    const params = new URLSearchParams({
+      latitude: String(latitude),
+      longitude: String(longitude),
+      daily:
+        "temperature_2m_min,temperature_2m_max,weathercode,wind_speed_10m_max,wind_direction_10m_dominant,sunrise,sunset",
+      hourly:
+        "weathercode,relative_humidity_2m,apparent_temperature,surface_pressure",
+      past_days: "1",
+      forecast_days: "4",
+      wind_speed_unit: "ms",
+      timezone: "auto",
+      current_weather: "true",
+    }).toString();
+
+    const url = `https://api.open-meteo.com/v1/forecast?${params}`;
 
     const { data } = await axios.get(url);
+
+    // Апдейтит атомы конкретной погоды на сегодня (влажность, температура по ощущениям, давление) через объект hourly из api
+    updateAtomsByHourly(ctx, data);
 
     // Апдейтим атомы заката и рассвета на сегодня
     updateSunStateAtoms(ctx, data);
@@ -43,9 +54,7 @@ export const loadForecast = action(async (ctx) => {
     updateForecastArrayByApi(ctx, data.daily, data.hourly);
 
     // Апдейтим атомы currentTemperatureAtom, currentWeatherCodeAtom, isDay для сейчашней погоды
-    updateCurrentWeatherCodeAtom(ctx, data);
-    updateCurrentTemperatureAtom(ctx, data);
-    updateIsDayAtom(ctx, data);
+    updateAtomsByCurrentWeather(ctx, data.current_weather);
   } catch (e) {
     errorAtom(ctx, e as string);
     console.log(e);
@@ -88,54 +97,30 @@ export const updateForecastArrayByApi = action(
   "updateForecastArrayByApi"
 );
 
-/** Апдейтит атом isDay */
-export const updateIsDayAtom = action((ctx, weatherData: any) => {
-  const dayCode = weatherData.current_weather.is_day;
-  if (dayCode === 1) {
-    isDayAtom(ctx, true);
-    return;
+export const updateAtomsByCurrentWeather = action(
+  (ctx, currentWeather: any) => {
+    /** Апдейтим текущий weatherCode */
+    currentWeatherCodeAtom(ctx, currentWeather.weathercode);
+
+    /** Апдейтим текущую температуру */
+    currentTemperatureAtom(ctx, Math.round(currentWeather.temperature));
+
+    /** Апдейтим текущее направление ветра в градусах */
+    currentWindDirectionAtom(ctx, Math.round(currentWeather.winddirection));
+
+    /** Апдейтим текущую скорость ветра в м/с */
+    currentWindSpeed(ctx, Math.round(currentWeather.windspeed));
+
+    /** Апдейтим атом дня или ночи */
+    isDayAtom(ctx, currentWeather.is_day === 1 ? true : false);
   }
-  isDayAtom(ctx, false);
-}, "updateIsDayAtom");
-
-/** Апдейтит атом currentWeatherCodeAtom по данным из апи */
-export const updateCurrentWeatherCodeAtom = action((ctx, weatherData: any) => {
-  const currentWeatherCode = weatherData.current_weather.weathercode as number;
-
-  currentWeatherCodeAtom(ctx, currentWeatherCode);
-}, "updateCurrentWeatherCodeAtom");
-
-/** Апдейтит атом currentTemperatureAtom по данным из апи */
-export const updateCurrentTemperatureAtom = action((ctx, weatherData: any) => {
-  const currentTemperature = Math.round(
-    weatherData.current_weather.temperature
-  ) as number;
-
-  currentTemperatureAtom(ctx, currentTemperature);
-}, "updateCurrentTemperatureAtom");
-
-/** Определяет по атому или по параметру день ли сейчас и
- * с помощью этого и параметру weatherCode возаращет нужные данные
- * о погоде из мапы
- */
-export const getWeatherInfoFromMapAction = action(
-  (ctx, weatherCode: number, isDay?: boolean) => {
-    if (isDay === undefined) {
-      isDay = ctx.get(isDayAtom);
-    }
-
-    if (isDay) {
-      return weatherCodeMapDay.get(weatherCode);
-    }
-    return weatherCodeMapNight.get(weatherCode);
-  },
-  "getWeatherInfoFromMapAction"
 );
 
+/** Апдейтит атомы восхода и заката */
 export const updateSunStateAtoms = action((ctx, weatherData) => {
   const daily = weatherData.daily;
 
-  // Получаем сегодняшнюю дату
+  // Получаем сегодняшнюю дату без времени
   const currentDate = weatherData.current_weather.time.split("T")[0];
 
   // Вытаскиваем индекс сегодняшней даты из массива time
@@ -145,3 +130,21 @@ export const updateSunStateAtoms = action((ctx, weatherData) => {
   sunriseAtom(ctx, daily.sunrise[indexFromTimeArray].split("T")[1]);
   sunsetAtom(ctx, daily.sunset[indexFromTimeArray].split("T")[1]);
 }, "updateSunStateAtoms");
+
+/** Апдейтит атомы влажности, давления, температуры по ощущениям */
+export const updateAtomsByHourly = action((ctx, weatherData: any) => {
+  const hourly = weatherData.hourly;
+
+  // Обрезаем сегодняшнюю дату до часа
+  const currentHour = weatherData.current_weather.time.slice(0, 13);
+
+  // Получаем индекс
+  const index = (hourly.time as string[]).findIndex((t) =>
+    t.startsWith(currentHour)
+  );
+
+  // Подставляем в атомы нужные значения из массивов с давлением, температуры по ощущениям, влажности
+  currentHumidityAtom(ctx, hourly.relative_humidity_2m[index]);
+  currentAirPressureAtom(ctx, hourly.surface_pressure[index]);
+  currentFeelTemperatureAtom(ctx, hourly.apparent_temperature[index]);
+});

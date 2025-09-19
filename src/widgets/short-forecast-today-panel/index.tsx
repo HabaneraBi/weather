@@ -1,15 +1,14 @@
+import { getWeatherInfoFromMap } from "@/shared/functions/get-weather-info-from-map";
 import { reatomComponent } from "@reatom/npm-react";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
-import {
-  getWeatherInfoFromMapAction,
-  loadForecast,
-} from "../../shared/actions";
+import { loadForecast } from "../../shared/actions";
 import {
   cityAtom,
   currentTemperatureAtom,
   currentWeatherCodeAtom,
   forecastInfoDaysAtom,
+  isDayAtom,
   latitudeAtom,
   longitudeAtom,
 } from "../../shared/atoms";
@@ -23,17 +22,17 @@ export const ShortForecastTodayPanel = reatomComponent(({ ctx }) => {
   // Получаем инфу о текущей погоде
   const weatherInfoFromMap =
     currentWeatherCode !== null
-      ? getWeatherInfoFromMapAction(ctx, currentWeatherCode)
+      ? getWeatherInfoFromMap(currentWeatherCode, ctx.spy(isDayAtom))
       : undefined;
 
   useEffect(() => {
     if (latitude === null || longitude === null) return;
     loadForecast(ctx);
 
-    // Делаем запрос каждые 20 минут
+    // Делаем запрос каждый час
     const interval = setInterval(() => {
       loadForecast(ctx);
-    }, 20 * 60 * 1000);
+    }, 60 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [latitude, longitude]);

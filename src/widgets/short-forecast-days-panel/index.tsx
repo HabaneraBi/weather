@@ -1,5 +1,9 @@
 import CalendarImage from "@/shared/assets/images/calendar.svg";
-import { colorThemeAtom, forecastInfoDaysAtom } from "@/shared/atoms";
+import {
+  forecastInfoDaysAtom,
+  mainColorThemeAtom,
+  secondlyColorThemeAtom,
+} from "@/shared/atoms";
 import { reatomComponent } from "@reatom/npm-react";
 import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -9,7 +13,8 @@ export const ShortForecastDaysPanel = reatomComponent(({ ctx }) => {
   const forecastArray = ctx.spy(forecastInfoDaysAtom).slice(1, 4);
   const router = useRouter();
 
-  const styleByTimeOfDay = ctx.spy(colorThemeAtom);
+  const mainColorByTimeOfDay = ctx.spy(mainColorThemeAtom);
+  const secondlyColorByTimeOfDay = ctx.spy(secondlyColorThemeAtom);
 
   return (
     <>
@@ -17,12 +22,12 @@ export const ShortForecastDaysPanel = reatomComponent(({ ctx }) => {
         <TouchableOpacity
           onPress={() => router.push("./forecast-days")}
           activeOpacity={0.9}
-          style={{ backgroundColor: styleByTimeOfDay }}
+          style={{ backgroundColor: mainColorByTimeOfDay }}
           className="flex flex-col gap-4 rounded-xl w-full p-3"
         >
           <View className="flex flex-row items-center gap-2">
             <View
-              style={{ backgroundColor: styleByTimeOfDay }}
+              style={{ backgroundColor: secondlyColorByTimeOfDay }}
               className="flex flex-row justify-center items-center size-6 rounded-xl"
             >
               <CalendarImage width={15} height={15} />
@@ -40,7 +45,7 @@ export const ShortForecastDaysPanel = reatomComponent(({ ctx }) => {
             ))}
           </View>
           <TouchableOpacity
-            style={{ backgroundColor: styleByTimeOfDay }}
+            style={{ backgroundColor: secondlyColorByTimeOfDay }}
             onPress={() => router.push("./forecast-days")}
             activeOpacity={0.3}
             className="w-full py-3 h-45 rounded-lg"

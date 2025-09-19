@@ -1,6 +1,6 @@
-import { getWeatherInfoFromMapAction } from "@/shared/actions";
 import { compasMap } from "@/shared/constants/compas-map";
 import { formatForecastDate } from "@/shared/functions/format-forecast-label";
+import { getWeatherInfoFromMap } from "@/shared/functions/get-weather-info-from-map";
 import { DayForecastInfo } from "@/shared/types";
 import { reatomComponent } from "@reatom/npm-react";
 import { FC } from "React";
@@ -25,23 +25,14 @@ export const FullForecastDay: FC<ForecastDayProps> = reatomComponent(
           </Text>
           <Text className="text-lg">{forecastDay.date.slice(5)}</Text>
           <Text className="text-lg">
-            {
-              getWeatherInfoFromMapAction(ctx, forecastDay.weatherCodeDay, true)
-                ?.icon
-            }
+            {getWeatherInfoFromMap(forecastDay.weatherCodeDay, true)?.icon}
           </Text>
           <Text className="text-lg">{forecastDay.tMax}°</Text>
         </View>
         <View className="flex flex-col items-center gap-6">
           <Text className="text-lg">{forecastDay.tMin}°</Text>
           <Text className="text-lg">
-            {
-              getWeatherInfoFromMapAction(
-                ctx,
-                forecastDay.weatherCodeNight,
-                false
-              )?.icon
-            }
+            {getWeatherInfoFromMap(forecastDay.weatherCodeNight, false)?.icon}
           </Text>
           <View className="flex flex-row items-center gap-1">
             <Text>{compasMap.get(forecastDay.windDirection)}</Text>

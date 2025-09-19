@@ -1,4 +1,4 @@
-import { colorThemeAtom } from "@/shared/atoms";
+import { mainColorThemeAtom } from "@/shared/atoms";
 import { ForecastEntityInfo } from "@/widgets/full-forecast-today-panel/model/type";
 import { reatomComponent } from "@reatom/npm-react";
 import { FC } from "react";
@@ -10,11 +10,11 @@ type ForecastEntityBlockProps = {
 
 export const ForecastEntityBlock: FC<ForecastEntityBlockProps> =
   reatomComponent(({ ctx, forecastEntityInfo }) => {
-    const styleByTimeOfDay = ctx.spy(colorThemeAtom);
+    const styleByTimeOfDay = ctx.spy(mainColorThemeAtom);
     return (
       <View
         style={{ backgroundColor: styleByTimeOfDay }}
-        className="w-1/2 aspect-square rounded-xl relative"
+        className="aspect-square rounded-xl relative"
       >
         <View className="absolute left-3 top-3">
           <Text className="text-white text-lg">
@@ -25,7 +25,9 @@ export const ForecastEntityBlock: FC<ForecastEntityBlockProps> =
           </Text>
         </View>
         <View className="absolute bottom-3 right-3">
-          <Text className="text-white text-5xl">{forecastEntityInfo.icon}</Text>
+          <Text className="text-white text-[42px]">
+            {forecastEntityInfo.icon}
+          </Text>
         </View>
       </View>
     );

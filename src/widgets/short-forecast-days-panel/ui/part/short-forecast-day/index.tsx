@@ -1,5 +1,6 @@
-import { getWeatherInfoFromMapAction } from "@/shared/actions";
+import { isDayAtom } from "@/shared/atoms";
 import { formatForecastDate } from "@/shared/functions/format-forecast-label";
+import { getWeatherInfoFromMap } from "@/shared/functions/get-weather-info-from-map";
 import { DayForecastInfo } from "@/shared/types";
 import { reatomComponent } from "@reatom/npm-react";
 import { FC } from "React";
@@ -12,10 +13,11 @@ type ShortForecastDayProps = {
 
 export const ShortForecastDay: FC<ShortForecastDayProps> = reatomComponent(
   ({ ctx, forecastDay, index }) => {
-    const weatherIcon = getWeatherInfoFromMapAction(
-      ctx,
-      forecastDay.averageWeatherCode
+    const weatherIcon = getWeatherInfoFromMap(
+      forecastDay.averageWeatherCode,
+      ctx.spy(isDayAtom)
     )?.icon;
+
     return (
       <View className="flex flex-col">
         <View className="flex flex-row justify-between items-center h-14">
