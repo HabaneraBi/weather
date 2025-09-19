@@ -5,7 +5,7 @@ import {
   currentFeelTemperatureAtom,
   currentHumidityAtom,
   currentWindDirectionAtom,
-  currentWindSpeed,
+  currentWindSpeedAtom,
   sunriseAtom,
   sunsetAtom,
 } from "@/shared/atoms";
@@ -47,7 +47,7 @@ export const FullForecastTodayPanel = reatomComponent(({ ctx }) => {
     },
     {
       header: windDirection,
-      value: String(ctx.spy(currentWindSpeed)) + " м/с",
+      value: String(ctx.spy(currentWindSpeedAtom)) + " м/с",
       icon: compasMap.get(windDirection) as string,
     },
   ];

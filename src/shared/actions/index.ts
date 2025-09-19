@@ -7,9 +7,10 @@ import {
   currentTemperatureAtom,
   currentWeatherCodeAtom,
   currentWindDirectionAtom,
-  currentWindSpeed,
+  currentWindSpeedAtom,
   errorAtom,
   forecastInfoDaysAtom,
+  hourlyForecastArrayAtom,
   isDayAtom,
   latitudeAtom,
   longitudeAtom,
@@ -18,7 +19,7 @@ import {
 } from "../atoms";
 import { degToCompass } from "../functions/deg-to-compass";
 import { getWeatherCodeFromHour } from "../functions/get-weather-code-from-hour";
-import { DayForecastInfo } from "../types";
+import { CurrentHourForecast, DayForecastInfo } from "../types";
 
 export const loadForecast = action(async (ctx) => {
   try {
@@ -32,7 +33,7 @@ export const loadForecast = action(async (ctx) => {
       daily:
         "temperature_2m_min,temperature_2m_max,weathercode,wind_speed_10m_max,wind_direction_10m_dominant,sunrise,sunset",
       hourly:
-        "weathercode,relative_humidity_2m,apparent_temperature,surface_pressure",
+        "weathercode,relative_humidity_2m,apparent_temperature,surface_pressure,temperature_2m,windspeed_10m",
       past_days: "1",
       forecast_days: "4",
       wind_speed_unit: "ms",
@@ -92,7 +93,6 @@ export const updateForecastArrayByApi = action(
     );
 
     forecastInfoDaysAtom(ctx, days);
-    console.log(days);
   },
   "updateForecastArrayByApi"
 );
@@ -109,7 +109,7 @@ export const updateAtomsByCurrentWeather = action(
     currentWindDirectionAtom(ctx, Math.round(currentWeather.winddirection));
 
     /** Апдейтим текущую скорость ветра в м/с */
-    currentWindSpeed(ctx, Math.round(currentWeather.windspeed));
+    currentWindSpeedAtom(ctx, Math.round(currentWeather.windspeed));
 
     /** Апдейтим атом дня или ночи */
     isDayAtom(ctx, currentWeather.is_day === 1 ? true : false);
@@ -147,4 +147,22 @@ export const updateAtomsByHourly = action((ctx, weatherData: any) => {
   currentHumidityAtom(ctx, hourly.relative_humidity_2m[index]);
   currentAirPressureAtom(ctx, hourly.surface_pressure[index]);
   currentFeelTemperatureAtom(ctx, hourly.apparent_temperature[index]);
+
+  // Собираем массив для почасовой погоды
+  const hourlyArray: CurrentHourForecast[] = (hourly.time as string[])
+    .slice(index, index + 25)
+    .map((time, i) => {
+      const realIndex = index + i;
+      return {
+        date: time.slice(8, 10) + "." + time.slice(5, 7),
+        hour: time.slice(11, 13),
+        temperature: Math.round(hourly.temperature_2m[realIndex]),
+        windSpeed: Math.round(hourly.windspeed_10m[realIndex]),
+        weatherCode: hourly.weathercode[realIndex],
+      };
+    });
+
+  console.log(hourlyArray, "hourlyArray");
+
+  hourlyForecastArrayAtom(ctx, hourlyArray);
 });

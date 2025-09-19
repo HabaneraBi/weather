@@ -8,3 +8,11 @@ export type DayForecastInfo = {
   weatherCodeNight: number;
   weatherCodeDay: number;
 };
+
+export type CurrentHourForecast = {
+  date: string;
+  hour: string;
+  temperature: number;
+  windSpeed: number;
+  weatherCode: number;
+};

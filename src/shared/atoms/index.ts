@@ -1,5 +1,5 @@
 import { atom } from "@reatom/framework";
-import { DayForecastInfo } from "../types";
+import { CurrentHourForecast, DayForecastInfo } from "../types";
 
 /** Содержит значение долготы */
 export const longitudeAtom = atom<null | number>(null, "lolongitudeAtom");
@@ -66,4 +66,10 @@ export const currentFeelTemperatureAtom = atom(
 export const currentWindDirectionAtom = atom(0, "currentWindDirectionAtom");
 
 /** Атом содержащий текущую скорость ветра в м/с */
-export const currentWindSpeed = atom(0, "currentWindSpeed");
+export const currentWindSpeedAtom = atom(0, "currentWindSpeedAtom");
+
+/** Атом содержащий массив, состоящий из объектов почасовой погоды на 24 часа */
+export const hourlyForecastArrayAtom = atom<CurrentHourForecast[]>(
+  [],
+  "hourlyForecastArrayAtom"
+);
