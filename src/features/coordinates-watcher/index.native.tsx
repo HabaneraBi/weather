@@ -3,6 +3,7 @@ import * as Location from "expo-location";
 import { useEffect, useRef } from "react";
 import { latitudeAtom, longitudeAtom } from "../../shared/atoms";
 
+// Отслеживаем координаты для телефона
 export const CoordinatesWatcher = reatomComponent(({ ctx }) => {
   const subRef = useRef<Location.LocationSubscription | null>(null);
 
@@ -23,7 +24,6 @@ export const CoordinatesWatcher = reatomComponent(({ ctx }) => {
           timeInterval: 15000, // или каждые 15 сек (что раньше)
         },
         async (loc) => {
-          // апдейтим атомы
           const { latitude, longitude } = loc.coords;
           latitudeAtom(ctx, latitude);
           longitudeAtom(ctx, longitude);

@@ -7,12 +7,18 @@ import {
 } from "@/shared/atoms";
 import { reatomComponent } from "@reatom/npm-react";
 import { useEffect, useRef } from "react";
-import { Animated, Easing } from "react-native";
-
-const AnimatedSvg = Animated.createAnimatedComponent(LoadingImage);
+import { Animated, Easing, Platform } from "react-native";
 
 export const Loader = reatomComponent(({ ctx }) => {
   const spin = useRef(new Animated.Value(0)).current;
+
+  console.log(ctx.spy(longitudeAtom), "ctx.spy(longitudeAtom)");
+  console.log(ctx.spy(latitudeAtom), "ctx.spy(latitudeAtom)");
+  console.log(ctx.spy(cityAtom), "ctx.spy(cityAtom)");
+  console.log(
+    ctx.spy(forecastInfoDaysAtom).length,
+    "ctx.spy(forecastInfoDaysAtom).length"
+  );
 
   const isShowLoader =
     ctx.spy(longitudeAtom) !== null &&
@@ -26,7 +32,7 @@ export const Loader = reatomComponent(({ ctx }) => {
         toValue: 1,
         duration: 1000,
         easing: Easing.linear,
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS !== "web",
       })
     ).start();
   }, [spin]);
@@ -39,9 +45,7 @@ export const Loader = reatomComponent(({ ctx }) => {
   return (
     <>
       {isShowLoader ? null : (
-        <AnimatedSvg
-          width={48}
-          height={48}
+        <Animated.View
           style={{
             transform: [{ rotate }],
             zIndex: 5,
@@ -51,7 +55,9 @@ export const Loader = reatomComponent(({ ctx }) => {
             top: "50%",
             left: "50%",
           }}
-        />
+        >
+          <LoadingImage width={48} height={48} />
+        </Animated.View>
       )}
     </>
   );
