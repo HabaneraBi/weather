@@ -23,7 +23,6 @@ export const Loader = reatomComponent(({ ctx }) => {
   const isShowLoader =
     ctx.spy(longitudeAtom) !== null &&
     ctx.spy(latitudeAtom) !== null &&
-    ctx.spy(cityAtom) !== null &&
     ctx.spy(forecastInfoDaysAtom).length !== 0;
 
   useEffect(() => {
