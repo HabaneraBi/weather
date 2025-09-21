@@ -17,8 +17,9 @@ export const MainPage = () => {
   };
 
   return (
-    <View style={{ paddingBottom: 60 }}>
+    <View style={{ paddingBottom: 60, flex: 1 }}>
       <Animated.ScrollView
+        style={{ flex: 1 }}
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],

@@ -30,8 +30,6 @@ const Index = reatomComponent(({ ctx }) => {
     ctx.spy(latitudeAtom) !== null &&
     ctx.spy(forecastInfoDaysAtom).length !== 0;
 
-  console.log(isShowLoader);
-
   return (
     <>
       <LinearGradient
