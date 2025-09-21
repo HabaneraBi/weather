@@ -22,7 +22,11 @@ const RootLayout = () => {
         />
         <Stack.Screen
           name="forecast-days"
-          options={{ headerTitle: "", headerShadowVisible: false }}
+          options={{
+            headerTitle: "",
+            statusBarStyle: "dark",
+            headerShadowVisible: false,
+          }}
         />
         <Stack.Screen
           name="error"
