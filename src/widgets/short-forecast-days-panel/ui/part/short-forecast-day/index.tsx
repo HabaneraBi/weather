@@ -1,38 +1,33 @@
 import { formatForecastDate } from "@/shared/functions/format-forecast-label";
 import { getWeatherInfoFromMap } from "@/shared/functions/get-weather-info-from-map";
-import { DayForecastInfo } from "@/shared/types";
-import { reatomComponent } from "@reatom/npm-react";
 import { FC } from "React";
 import { Text, View } from "react-native";
+import { ShortForecastDayProps } from "./model/type";
 
-type ShortForecastDayProps = {
-  forecastDay: DayForecastInfo;
-  index: number;
-};
+export const ShortForecastDay: FC<ShortForecastDayProps> = ({
+  forecastDay,
+  index,
+}) => {
+  const weatherIcon = getWeatherInfoFromMap(
+    forecastDay.averageWeatherCode,
+    true
+  )?.icon;
 
-export const ShortForecastDay: FC<ShortForecastDayProps> = reatomComponent(
-  ({ ctx, forecastDay, index }) => {
-    const weatherIcon = getWeatherInfoFromMap(
-      forecastDay.averageWeatherCode,
-      true
-    )?.icon;
-
-    return (
-      <View className="flex flex-col">
-        <View className="flex flex-row justify-between items-center h-14">
-          <Text className="text-[#F3F3F3] w-[21%] text-xl">
-            {formatForecastDate(forecastDay.date, index, 3)}
-          </Text>
-          <Text className="text-xl text-white">{weatherIcon}</Text>
-          <View className="flex flex-row gap-1">
-            <Text className="text-xl text-cyan-300">{forecastDay.tMin}°</Text>
-            <Text className="text-xl text-white">/</Text>
-            <Text className="text-xl text-amber-300">{forecastDay.tMax}°</Text>
-          </View>
+  return (
+    <View className="flex flex-col">
+      <View className="flex flex-row justify-between items-center h-14">
+        <Text className="text-[#F3F3F3] w-[21%] text-xl">
+          {formatForecastDate(forecastDay.date, index, 3)}
+        </Text>
+        <Text className="text-xl text-white">{weatherIcon}</Text>
+        <View className="flex flex-row gap-1">
+          <Text className="text-xl text-cyan-300">{forecastDay.tMin}°</Text>
+          <Text className="text-xl text-white">/</Text>
+          <Text className="text-xl text-amber-300">{forecastDay.tMax}°</Text>
         </View>
-
-        <View className="h-[1px] w-full opacity-45 bg-white"></View>
       </View>
-    );
-  }
-);
+
+      <View className="h-[1px] w-full opacity-45 bg-white"></View>
+    </View>
+  );
+};

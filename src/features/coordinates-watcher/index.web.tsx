@@ -1,4 +1,5 @@
 import { reatomComponent } from "@reatom/npm-react";
+import { router } from "expo-router";
 import { useEffect, useRef } from "react";
 import { errorAtom, latitudeAtom, longitudeAtom } from "../../shared/atoms";
 
@@ -18,6 +19,7 @@ export const CoordinatesWatcher = reatomComponent(({ ctx }) => {
       (err) => {
         console.warn("Geolocation error (web):", err);
         errorAtom(ctx, err.message);
+        router.push("./error");
       },
       {
         enableHighAccuracy: true, // для точности

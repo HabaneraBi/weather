@@ -47,7 +47,7 @@ export const FullForecastTodayPanel = reatomComponent(({ ctx }) => {
     },
     {
       header: windDirection,
-      value: String(ctx.spy(currentWindSpeedAtom)) + " м/с",
+      value: ctx.spy(currentWindSpeedAtom) + " м/с",
       icon: compasMap.get(windDirection) as string,
     },
   ];

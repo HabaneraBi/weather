@@ -1,12 +1,8 @@
 import { getWeatherInfoFromMap } from "@/shared/functions/get-weather-info-from-map";
-import { CurrentHourForecast } from "@/shared/types";
 import { FC } from "React";
 import { Text, View } from "react-native";
 import { tempToColor } from "./model/functions/temp-to-color";
-
-type HourForecastProps = {
-  currentHourForecast: CurrentHourForecast;
-};
+import { HourForecastProps } from "./model/type";
 
 export const HourForecast: FC<HourForecastProps> = ({
   currentHourForecast,

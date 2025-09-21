@@ -1,5 +1,3 @@
-import { action } from "@reatom/framework";
-import axios from "axios";
 import {
   currentAirPressureAtom,
   currentFeelTemperatureAtom,
@@ -16,12 +14,15 @@ import {
   longitudeAtom,
   sunriseAtom,
   sunsetAtom,
-} from "../atoms";
-import { degToCompass } from "../functions/deg-to-compass";
-import { getWeatherCodeFromHour } from "../functions/get-weather-code-from-hour";
-import { CurrentHourForecast, DayForecastInfo } from "../types";
+} from "@/shared/atoms";
+import { degToCompass } from "@/shared/functions/deg-to-compass";
+import { getWeatherCodeFromHour } from "@/shared/functions/get-weather-code-from-hour";
+import { CurrentHourForecast, DayForecastInfo } from "@/shared/types";
+import { action } from "@reatom/framework";
+import axios from "axios";
+import { router } from "expo-router";
 
-export const loadForecast = action(async (ctx) => {
+export const loadForecastAction = action(async (ctx) => {
   try {
     // Получаем из атомов широту и долготу
     const latitude = ctx.get(latitudeAtom);
@@ -57,10 +58,12 @@ export const loadForecast = action(async (ctx) => {
     // Апдейтим атомы currentTemperatureAtom, currentWeatherCodeAtom, isDay для сейчашней погоды
     updateAtomsByCurrentWeather(ctx, data.current_weather);
   } catch (e) {
-    errorAtom(ctx, e as string);
-    console.log(e);
+    const error = e as any;
+    errorAtom(ctx, `Error - ${error.message}`);
+    console.error(e);
+    router.push("/error");
   }
-}, "loadForecast");
+}, "loadForecastAction");
 
 /** Составляет массив и апдейтит forecastInfoDaysAtom по данным из апи */
 export const updateForecastArrayByApi = action(
@@ -164,8 +167,6 @@ export const updateAtomsByHourly = action((ctx, weatherData: any) => {
         weatherCode: hourly.weathercode[realIndex],
       };
     });
-
-  console.log(hourlyArray, "hourlyArray");
 
   hourlyForecastArrayAtom(ctx, hourlyArray);
 });

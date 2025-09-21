@@ -4,13 +4,36 @@ import { Stack } from "expo-router";
 
 const ctx = createCtx();
 
-export default function RootLayout() {
+const RootLayout = () => {
   return (
     <reatomContext.Provider value={ctx}>
       <Stack>
-        <Stack.Screen name="index" options={{ title: "Home" }} />
-        <Stack.Screen name="forecast-days" options={{ title: "Forecast" }} />
+        <Stack.Screen
+          name="index"
+          options={{
+            headerStyle: {
+              backgroundColor: "#50acff",
+            },
+            headerShadowVisible: false,
+            headerTitle: "",
+            headerBackTitleVisible: false,
+            statusBarStyle: "light",
+          }}
+        />
+        <Stack.Screen
+          name="forecast-days"
+          options={{ headerTitle: "", headerShadowVisible: false }}
+        />
+        <Stack.Screen
+          name="error"
+          options={{
+            statusBarStyle: "dark",
+            headerShown: false,
+          }}
+        />
       </Stack>
     </reatomContext.Provider>
   );
-}
+};
+
+export default RootLayout;

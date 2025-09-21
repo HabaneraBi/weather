@@ -34,7 +34,6 @@ export const ShortForecastDaysPanel = reatomComponent(({ ctx }) => {
             </View>
             <Text className="text-[#F3F3F3] text-lg">Прогноз на 5 дней</Text>
           </View>
-          {/* bg-[#5f8ec2] */}
           <View>
             {forecastArray.map((item, index) => (
               <ShortForecastDay
